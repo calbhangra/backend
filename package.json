@@ -4,6 +4,7 @@
   "description": "Backend services for the Cal Bhangra web & (possible) mobile apps",
   "main": "index.js",
   "scripts": {
+    "start": "export NODE_ENV=production && node index.js",
     "watch": "nodemon index.js"
   },
   "repository": {
@@ -19,12 +20,16 @@
   "dependencies": {
     "bluebird": "^3.4.0",
     "body-parser": "^1.15.1",
+    "config": "^1.21.0",
     "cors": "^2.7.1",
     "express": "^4.13.4",
     "lodash": "^4.13.1",
     "passport": "^0.3.2"
   },
   "devDependencies": {
+    "eslint": "^2.11.1",
+    "istanbul": "^0.4.3",
+    "jscs": "^3.0.4",
     "nodemon": "^1.9.2"
   }
 }
