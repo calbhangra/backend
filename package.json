@@ -1,0 +1,30 @@
+{
+  "name": "cal-bhangra-app-backend",
+  "version": "0.0.0",
+  "description": "Backend services for the Cal Bhangra web & (possible) mobile apps",
+  "main": "index.js",
+  "scripts": {
+    "watch": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/calbhangra/backend.git"
+  },
+  "author": "Cal Bhangra",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/calbhangra/backend/issues"
+  },
+  "homepage": "https://github.com/calbhangra/backend#readme",
+  "dependencies": {
+    "bluebird": "^3.4.0",
+    "body-parser": "^1.15.1",
+    "cors": "^2.7.1",
+    "express": "^4.13.4",
+    "lodash": "^4.13.1",
+    "passport": "^0.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.9.2"
+  }
+}
