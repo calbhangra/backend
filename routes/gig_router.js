@@ -23,7 +23,7 @@ router.delete('/:id', (req, res) => {
 });
 
 router.param('id', (req, res, next, id) => {
-  req.gig = 'get gig from db';
+  req.gig = 'get gig from db ' + id;
   next();
 });
 
