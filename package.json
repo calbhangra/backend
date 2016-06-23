@@ -26,7 +26,10 @@
     "cors": "^2.7.1",
     "express": "^4.13.4",
     "lodash": "^4.13.1",
-    "passport": "^0.3.2"
+    "passport": "^0.3.2",
+    "pg": "^5.1.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.23.3"
   },
   "devDependencies": {
     "ava": "^0.15.2",
