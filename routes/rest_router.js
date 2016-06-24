@@ -1,5 +1,8 @@
 'use strict';
 
+// TODO REMOVE THIS FILE IF UNUSED??
+
+
 var express = require('express');
 
 /**
@@ -27,5 +30,3 @@ function restRouter(controller) {
 
   return router;
 }
-
-export default restRouter;
