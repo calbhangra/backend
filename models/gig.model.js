@@ -8,8 +8,8 @@ module.exports = function(sequelize) {
     accepted: Sequelize.BOOLEAN,
     compensation: Sequelize.NUMBER,
     contactEmail: Sequelize.EMAIL,
-    dancersRequested: Sequelize.NUMBER
+    dancersRequested: Sequelize.NUMBER,
   });
 
-  sequelize['gig'] = Gig;
+  sequelize.gig = Gig;
 };

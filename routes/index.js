@@ -6,7 +6,7 @@ var setupRoutes = function(app, sequelize) {
 
   // Here we will explicitly import all the routes we care about and set them up
   [
-    'gig'
+    'gig',
   ].forEach(function(route) {
     require('./' + route + '.router')(route, app, sequelize);
   });
