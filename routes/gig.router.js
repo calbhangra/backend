@@ -4,16 +4,21 @@ module.exports = function(prefix, app, sequelize) {
 
   app.get('/' + prefix, function(req, res) {
     // TODO
-    // 1. validate incoming data
-    // 2. send validated to model for creation
-    res.send('sample get response for model: ' + model);
+    // 1. determine if req for one object or multiple
+    // 2. check user permissions
+    // 3. request object(s) from the model
+    model
+      .findAll()
+      .then(data => res.send(data));
   });
 
   app.post('/' + prefix, function(req, res) {
     // TODO
-    // 1. determine if req for one object or multiple
-    // 2. check user permissions
-    // 3. request object(s) from the model
+    // 1. validate incoming data
+    // 2. send validated to model for creation
+    model
+      .create(req.body)
+      .then(data => res.send(data));
   });
 
   app.put('/' + prefix, function(req, res) {
