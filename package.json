@@ -4,9 +4,9 @@
   "description": "Backend services for the Cal Bhangra web & (possible) mobile apps",
   "main": "lib/index.js",
   "scripts": {
-    "start": "nodemon lib/index.js --exec babel-node",
+    "start": "nodemon lib/app.js --exec babel-node",
     "build": "babel lib -d dist",
-    "serve": "npm run build && NODE_ENV=production node dist/index.js",
+    "serve": "npm run build && NODE_ENV=production node dist/app.js",
     "test": "eslint . && ava"
   },
   "repository": {
