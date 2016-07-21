@@ -7,10 +7,10 @@ module.exports = function(sequelize) {
     accepted: Sequelize.BOOLEAN,
     compensation: Sequelize.DOUBLE,
     contactEmail: Sequelize.STRING,
-    dancersRequested: Sequelize.INTEGER,
+    dancersRequested: Sequelize.INTEGER
   });
 
   // TODO this shouldnt be here
-  Gig.sync()
+  Gig.sync();
   sequelize.gig = Gig;
 };
