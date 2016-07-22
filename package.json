@@ -1,6 +1,6 @@
 {
   "name": "cal-bhangra-app-backend",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Backend services for the Cal Bhangra web & (possible) mobile apps",
   "main": "lib/index.js",
   "scripts": {
