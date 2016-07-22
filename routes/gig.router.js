@@ -1,12 +1,12 @@
 'use strict';
 
 import express from 'express';
-import {Gig} from '../models';
+import models from '../models';
 
+var Gig = models.Gig;
 var router = express.Router(); // eslint-disable-line new-cap
-var route = router.route('/gig');
 
-route.get('/', (req, res) => {
+router.get('/', (req, res) => {
   // TODO
   // 1. determine if req for one object or multiple
   // 2. check user permissions
@@ -15,7 +15,7 @@ route.get('/', (req, res) => {
     .then(data => res.send(data));
 });
 
-route.post('/', (req, res) => {
+router.post('/', (req, res) => {
   // TODO
   // 1. validate incoming data
   // 2. send validated to model for creation
@@ -23,7 +23,7 @@ route.post('/', (req, res) => {
     .then(data => res.send(data));
 });
 
-route.put('/:gigId', (req, res) => {
+router.put('/:gigId', (req, res) => {
   // TODO
   // 1. validate incoming data
   // 2. check user's permissions
@@ -32,7 +32,7 @@ route.put('/:gigId', (req, res) => {
   res.sendStatus(500);
 });
 
-route.delete('/:gigId', (req, res) => {
+router.delete('/:gigId', (req, res) => {
   // TODO
   // 1. check user permissions
   // 2. log username and metadata into seperate log file

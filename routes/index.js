@@ -1,10 +1,17 @@
 'use strict';
 
 import express from 'express';
-var router = express.Router(); // eslint-disable-line new-cap
+var baseRouter = express.Router(); // eslint-disable-line new-cap
+var routes = ['gig'];
 
-router.get('/', function index(req, res) {
+baseRouter.get('/', function index(req, res) {
   res.send('home page');
 });
 
-export default router;
+var router;
+routes.forEach(route => {
+  router = require(`./${route}.router`);
+  baseRouter.use(`/${route}`, router.default);
+});
+
+export default baseRouter;
