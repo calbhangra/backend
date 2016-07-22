@@ -3,6 +3,7 @@
   "postgres": {
     "username": "postgres",
     "password": "calbhangra",
-    "database": "calbhangra"
+    "database": "calbhangra",
+    "dialect": "postgres"
   }
 }
