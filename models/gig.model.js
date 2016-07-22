@@ -1,16 +1,15 @@
-var Sequelize = require('sequelize');
+'use strict';
 
-module.exports = function(sequelize) {
-  // TODO should number of dancers be broken down by gender?
-  var Gig = sequelize.define('gig', {
-    date: Sequelize.DATE,
-    accepted: Sequelize.BOOLEAN,
-    compensation: Sequelize.DOUBLE,
-    contactEmail: Sequelize.STRING,
-    dancersRequested: Sequelize.INTEGER
+var Gig = function model(sequelize, DataTypes) {
+
+  return sequelize.define('Gig', {
+    date: DataTypes.DATE,
+    accepted: DataTypes.BOOLEAN,
+    compensation: DataTypes.DOUBLE,
+    contactEmail: DataTypes.STRING,
+    dancersRequested: DataTypes.INTEGER,
   });
 
-  // TODO this shouldnt be here
-  Gig.sync();
-  sequelize.gig = Gig;
 };
+
+export default Gig;

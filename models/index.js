@@ -1,12 +1,25 @@
-var models = [
-  'gig'
-];
+'use strict';
 
-var setupModels = function(sequelize) {
-  // Here we will explicitly import all the models we care about and set them up
-  models.forEach(model => {
-    require('./' + model + '.model')(sequelize);
+import fs from 'fs';
+import path from 'path';
+import {postgres} from '../lib/db';
+
+var models = {};
+var basename = path.basename(module.filename);
+
+fs.readdirSync(__dirname)
+  .filter(function(file) { // eslint-disable-next-line no-magic-numbers, max-len
+    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+  })
+  .forEach(function(file) {
+    var model = postgres.import(path.join(__dirname, file));
+    models[model.name] = model;
   });
-};
 
-module.exports = setupModels;
+Object.keys(models).forEach(function(modelName) {
+  if (models[modelName].associate) {
+    models[modelName].associate(models);
+  }
+});
+
+export default models;
