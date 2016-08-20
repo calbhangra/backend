@@ -20,13 +20,15 @@
   },
   "homepage": "https://github.com/calbhangra/backend#readme",
   "dependencies": {
-    "bluebird": "^3.4.0",
+    "bcrypt": "^0.8.7",
+    "bluebird": "^3.4.1",
     "body-parser": "^1.15.1",
     "config": "^1.21.0",
     "cors": "^2.7.1",
     "express": "^4.13.4",
     "lodash": "^4.13.1",
     "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "pg": "^6.0.3",
     "pg-hstore": "^2.3.2",
     "sequelize": "^3.23.3"
