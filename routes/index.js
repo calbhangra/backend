@@ -2,7 +2,7 @@
 
 import express from 'express';
 var baseRouter = express.Router(); // eslint-disable-line new-cap
-var routes = ['gig'];
+var routes = ['gig', 'user'];
 
 baseRouter.get('/', function index(req, res) {
   res.send('home page');
