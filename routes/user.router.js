@@ -1,40 +1,31 @@
 import _ from 'lodash';
 import {Router} from 'express';
-import {ValidationError} from 'sequelize';
 
 import models from '../models';
+import promise from './promise';
+import {ServerError, NotFoundError} from '../lib/errors';
 
 const User = models.User;
 const router = new Router();
 
 // TODO add permission checks to all routes except create
-// TODO handle all validation errors in one place
 
-router.get('/', (req, res) => {
+router.get('/', promise(() => {
+  return User.findAll();
+}));
 
-  return User
-    .findAll()
-    .then(data => res.send(data));
-});
+router.post('/', promise(req => {
+  return User.create(req.body);
+}));
 
-router.post('/', (req, res) => {
-
-  return User
-    .create(req.body)
-    .then(data => res.send(data))
-    .catch(ValidationError, err => {
-      res.status(400).send(err.errors[0]);
-    });
-});
-
-router.get('/:id', (req, res) => {
+router.get('/:id', promise(req => {
 
   return User
     .findById(req.params.id)
-    .then(gig => res.send(gig));
-});
+    .tap(user => { if (!user) throw new NotFoundError(); });
+}));
 
-router.put('/:id', (req, res) => {
+router.put('/:id', promise(req => {
   var fields = Object.keys(req.body);
   fields = _.without(fields, 'password');
 
@@ -44,28 +35,18 @@ router.put('/:id', (req, res) => {
       returning: true,
       fields: fields,
     })
-    .then(([count, records])=> {
-      if (count !== 1) {
-        // TODO throw error instead
-        res.sendStatus(500);
-      }
-
-      res.send(records[0]);
-    })
-    .catch(ValidationError, err => {
-      res.status(400).send(err.errors[0]);
+    .spread((count, records) => {
+      if (count !== 1) throw new ServerError();
+      return records[0];
     });
-});
+}));
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', promise(req => {
   // TODO log username and metadata into seperate log file
 
   return User
     .destroy({where: {id: req.params.id}})
-    .then(count => {
-      var status = count === 1 ? 200 : 500;
-      res.sendStatus(status);
-    });
-});
+    .then(count => { if (count !== 1) throw new ServerError(); });
+}));
 
 export default router;
