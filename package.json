@@ -7,6 +7,7 @@
     "start": "nodemon lib/app.js --exec babel-node",
     "build": "babel lib -d dist",
     "serve": "npm run build && NODE_ENV=production node dist/app.js",
+    "lint": "eslint . --fix",
     "test": "eslint . && ava"
   },
   "repository": {
@@ -39,12 +40,19 @@
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-stage-2": "^6.5.0",
     "eslint": "^3.1.1",
-    "eslint-config-gurpreet": "^0.3.0",
+    "eslint-config-smartcar": "^0.1.8",
     "istanbul": "^0.4.3",
     "jscs": "^3.0.4",
     "nodemon": "^1.9.2"
   },
   "eslintConfig": {
-    "extends": "gurpreet"
+    "extends": "smartcar",
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
+    "env": {
+      "es6": true
+    }
   }
 }
