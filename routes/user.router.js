@@ -3,7 +3,7 @@ import {Router} from 'express';
 
 import models from '../models';
 import promise from './promise';
-import {ServerError, NotFoundError} from '../lib/errors';
+import {NotFoundError, ServerError} from '../lib/errors';
 
 const User = models.User;
 const router = new Router();
@@ -19,10 +19,7 @@ router.post('/', promise(req => {
 }));
 
 router.get('/:id', promise(req => {
-
-  return User
-    .findById(req.params.id)
-    .tap(user => { if (!user) throw new NotFoundError(); });
+  return User.findById(req.params.id);
 }));
 
 router.put('/:id', promise(req => {

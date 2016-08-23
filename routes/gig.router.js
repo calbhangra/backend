@@ -1,67 +1,45 @@
 import {Router} from 'express';
-import {ValidationError} from 'sequelize';
 
 import models from '../models';
+import promise from './promise';
+import {NotFoundError, ServerError} from '../lib/errors';
 
 const Gig = models.Gig;
 const router = new Router();
 
 // TODO add permission checks to all routes except create
-// TODO handle all validation errors in one place
 
-router.get('/', (req, res) => {
+router.get('/', promise(() => {
+  return Gig.findAll();
+}));
 
-  return Gig
-    .findAll()
-    .then(data => res.send(data));
-});
+router.post('/', promise(req => {
+  return Gig.create(req.body);
+}));
 
-router.post('/', (req, res) => {
+router.get('/:id', promise(req => {
+  return Gig.findById(req.params.id);
+}));
 
-  return Gig
-    .create(req.body)
-    .then(data => res.send(data))
-    .catch(ValidationError, err => {
-      res.status(400).send(err.errors[0]);
-    });
-});
-
-router.get('/:id', (req, res) => {
-
-  return Gig
-    .findById(req.params.id)
-    .then(gig => res.send(gig));
-});
-
-router.put('/:id', (req, res) => {
+router.put('/:id', promise(req => {
 
   return Gig
     .update(req.body, {
       where: {id: req.params.id},
       returning: true,
     })
-    .then(([count, records])=> {
-      if (count !== 1) {
-        // TODO throw error instead
-        res.sendStatus(500);
-      }
-
-      res.send(records[0]);
-    })
-    .catch(ValidationError, err => {
-      res.status(400).send(err.errors[0]);
+    .spread((count, records) => {
+      if (count !== 1) throw new ServerError();
+      return records[0];
     });
-});
+}));
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', promise(req => {
   // TODO log username and metadata into seperate log file
 
   return Gig
     .destroy({where: {id: req.params.id}})
-    .then(count => {
-      var status = count === 1 ? 200 : 500;
-      res.sendStatus(status);
-    });
-});
+    .then(count => { if (count !== 1) throw new ServerError(); });
+}));
 
 export default router;
