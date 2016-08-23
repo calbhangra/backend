@@ -1,10 +1,9 @@
-'use strict';
+import {Router} from 'express';
 
-import express from 'express';
-const baseRouter = express.Router(); // eslint-disable-line new-cap
+const baseRouter = new Router();
 const routes = ['gig', 'user', 'auth'];
 
-baseRouter.get('/', function index(req, res) {
+baseRouter.get('/', (req, res) => {
   res.send('home page');
 });
 

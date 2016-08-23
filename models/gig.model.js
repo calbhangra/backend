@@ -1,6 +1,4 @@
-'use strict';
-
-var Gig = function model(sequelize, DataTypes) {
+const Gig = function model(sequelize, DataTypes) {
 
   return sequelize.define('Gig', {
     date: {
@@ -13,7 +11,7 @@ var Gig = function model(sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       validate: {
         isBoolean: true,
-       },
+      },
     },
     compensation: {
       type: DataTypes.DOUBLE,

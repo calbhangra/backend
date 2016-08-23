@@ -1,42 +1,45 @@
-'use strict';
-
-import express from 'express';
-import models from '../models';
+import {Router} from 'express';
 import {ValidationError} from 'sequelize';
 
-var Gig = models.Gig;
-var router = express.Router(); // eslint-disable-line new-cap
+import models from '../models';
+
+const Gig = models.Gig;
+const router = new Router();
 
 // TODO add permission checks to all routes except create
 // TODO handle all validation errors in one place
 
 router.get('/', (req, res) => {
 
-  Gig.findAll()
+  return Gig
+    .findAll()
     .then(data => res.send(data));
 });
 
 router.post('/', (req, res) => {
 
-  Gig.create(req.body)
+  return Gig
+    .create(req.body)
     .then(data => res.send(data))
     .catch(ValidationError, err => {
       res.status(400).send(err.errors[0]);
-     })
+    });
 });
 
 router.get('/:id', (req, res) => {
 
-  Gig.findById(req.params.id)
+  return Gig
+    .findById(req.params.id)
     .then(gig => res.send(gig));
 });
 
 router.put('/:id', (req, res) => {
 
-  Gig.update(req.body, {
+  return Gig
+    .update(req.body, {
       where: {id: req.params.id},
       returning: true,
-     })
+    })
     .then(([count, records])=> {
       if (count !== 1) {
         // TODO throw error instead
@@ -44,16 +47,17 @@ router.put('/:id', (req, res) => {
       }
 
       res.send(records[0]);
-     })
+    })
     .catch(ValidationError, err => {
       res.status(400).send(err.errors[0]);
-     })
+    });
 });
 
 router.delete('/:id', (req, res) => {
   // TODO log username and metadata into seperate log file
 
-  Gig.destroy({where: {id: req.params.id}})
+  return Gig
+    .destroy({where: {id: req.params.id}})
     .then(count => {
       var status = count === 1 ? 200 : 500;
       res.sendStatus(status);

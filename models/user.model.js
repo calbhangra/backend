@@ -1,12 +1,10 @@
-'use strict';
-
 import bcrypt from 'bcrypt';
 import Promise from 'bluebird';
 
 const ROUNDS = 10;
 const createHash = Promise.promisify(bcrypt.hash);
 
-var User = function model(sequelize, DataTypes) {
+const User = function model(sequelize, DataTypes) {
 
   return sequelize.define('User', {
     email: {
@@ -35,7 +33,7 @@ var User = function model(sequelize, DataTypes) {
 
         return createHash(user.password, ROUNDS)
            .then(hash => user.password = hash);
-     },
+      },
     }
   });
 
