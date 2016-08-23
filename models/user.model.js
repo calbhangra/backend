@@ -1,8 +1,4 @@
-import bcrypt from 'bcrypt';
-import Promise from 'bluebird';
-
-const ROUNDS = 10;
-const createHash = Promise.promisify(bcrypt.hash);
+import password from '../lib/password';
 
 const User = function model(sequelize, DataTypes) {
 
@@ -31,7 +27,7 @@ const User = function model(sequelize, DataTypes) {
           return;
         }
 
-        return createHash(user.password, ROUNDS)
+        return password.hash(user.password)
            .then(hash => user.password = hash);
       },
     }
