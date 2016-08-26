@@ -1,9 +1,8 @@
 import {Router} from 'express';
 
-import models from '../models';
+import {User} from '../models';
 import auth from '../lib/passport';
 
-const User = models.User;
 const router = new Router();
 
 router.post('/login', auth, (req, res) => {

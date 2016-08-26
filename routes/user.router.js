@@ -1,11 +1,10 @@
 import _ from 'lodash';
 import {Router} from 'express';
 
-import models from '../models';
+import {User} from '../models';
 import promisify from './promisify';
-import {NotFoundError, ServerError} from '../lib/errors';
+import {ServerError} from '../lib/errors';
 
-const User = models.User;
 const router = new Router();
 
 // TODO add permission checks to all routes except create

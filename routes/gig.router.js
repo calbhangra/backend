@@ -1,10 +1,9 @@
 import {Router} from 'express';
 
-import models from '../models';
+import {Gig} from '../models';
 import promisify from './promisify';
 import {ServerError} from '../lib/errors';
 
-const Gig = models.Gig;
 const router = new Router();
 
 // TODO add permission checks to all routes except create
