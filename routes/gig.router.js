@@ -1,27 +1,27 @@
 import {Router} from 'express';
 
 import models from '../models';
-import promise from './promise';
-import {NotFoundError, ServerError} from '../lib/errors';
+import promisify from './promisify';
+import {ServerError} from '../lib/errors';
 
 const Gig = models.Gig;
 const router = new Router();
 
 // TODO add permission checks to all routes except create
 
-router.get('/', promise(() => {
+router.get('/', promisify(() => {
   return Gig.findAll();
 }));
 
-router.post('/', promise(req => {
+router.post('/', promisify(req => {
   return Gig.create(req.body);
 }));
 
-router.get('/:id', promise(req => {
+router.get('/:id', promisify(req => {
   return Gig.findById(req.params.id);
 }));
 
-router.put('/:id', promise(req => {
+router.put('/:id', promisify(req => {
 
   return Gig
     .update(req.body, {
@@ -34,7 +34,7 @@ router.put('/:id', promise(req => {
     });
 }));
 
-router.delete('/:id', promise(req => {
+router.delete('/:id', promisify(req => {
   // TODO log username and metadata into seperate log file
 
   return Gig

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {Router} from 'express';
 
 import models from '../models';
-import promise from './promise';
+import promisify from './promisify';
 import {NotFoundError, ServerError} from '../lib/errors';
 
 const User = models.User;
@@ -10,19 +10,19 @@ const router = new Router();
 
 // TODO add permission checks to all routes except create
 
-router.get('/', promise(() => {
+router.get('/', promisify(() => {
   return User.findAll();
 }));
 
-router.post('/', promise(req => {
+router.post('/', promisify(req => {
   return User.create(req.body);
 }));
 
-router.get('/:id', promise(req => {
+router.get('/:id', promisify(req => {
   return User.findById(req.params.id);
 }));
 
-router.put('/:id', promise(req => {
+router.put('/:id', promisify(req => {
   var fields = Object.keys(req.body);
   fields = _.without(fields, 'password');
 
@@ -38,7 +38,7 @@ router.put('/:id', promise(req => {
     });
 }));
 
-router.delete('/:id', promise(req => {
+router.delete('/:id', promisify(req => {
   // TODO log username and metadata into seperate log file
 
   return User
