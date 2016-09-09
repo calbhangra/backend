@@ -2,8 +2,16 @@ language: node_js
 node_js:
   - 'node'
   - '6'
-env:
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database calbhangra;' -U postgres
+
+env: >
   - CXX=g++-4.8
+  - NODE_CONFIG='{"postgres": {"password": ""}}'
 addons:
   apt:
     sources:
