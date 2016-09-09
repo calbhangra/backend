@@ -1,6 +1,5 @@
 language: node_js
 node_js:
-  - 'node'
   - '6'
 
 services:
@@ -12,10 +11,10 @@ before_script:
 env: >
   - CXX=g++-4.8
   - NODE_CONFIG='{"postgres": {"password": ""}}'
+
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
-      - gcc-4.8
