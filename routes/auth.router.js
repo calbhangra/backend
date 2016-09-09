@@ -1,6 +1,5 @@
 import {Router} from 'express';
 
-import {User} from '../models';
 import auth from '../lib/passport';
 
 const router = new Router();

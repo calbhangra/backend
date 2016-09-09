@@ -29,7 +29,7 @@ export default postgres.define('User', {
       }
 
       return password.hash(user.password)
-           .then(hash => user.password = hash);
+           .then(hash => (user.password = hash));
     },
   }
 });
