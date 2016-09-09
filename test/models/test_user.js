@@ -4,6 +4,8 @@ import {ValidationError} from 'sequelize';
 
 import {User} from '../../models';
 
+test.before(() => User.sync());
+
 test('requires email', async t => {
   const error = await User.build({}).validate();
 
