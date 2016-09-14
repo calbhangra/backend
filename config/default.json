@@ -5,5 +5,9 @@
     "password": "calbhangra",
     "database": "calbhangra",
     "dialect": "postgres"
+  },
+  "jwt": {
+    "algorithm": "HS512",
+    "secret": "GII06vjQyyKXvf5l9oa/hmXZDppgdzxTl/LQp4gITgoF9SD8l+9CLq3AMTds3d8hEUHAS4TIU7k41Y8am2BQGg=="
   }
 }

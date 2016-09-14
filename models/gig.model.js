@@ -1,6 +1,7 @@
 import Sequelize from 'sequelize';
 import {postgres} from '../lib/db';
 
+// TODO vardi, paagan, m/f, location, type, details
 export default postgres.define('Gig', {
   date: {
     type: Sequelize.DATE,
