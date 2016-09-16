@@ -10,8 +10,52 @@ test('key length matches hash length of algorithm', t => {
   t.is(secret.toString('ascii').length, hashLengthInBytes);
 });
 
-test('create', t => {
-  return jwt.create({nbf: 'not a number'})
-    .then(() => t.fail('bad data should throw error'))
-    .catch(jwt.JsonWebTokenError, () => t.pass());
+test('wraps any jwt.sign errors into JsonWebTokenErrors', t => {
+  t.plan(2);
+
+  try {
+    jwt.create('not an object');
+  } catch (e) {
+    t.true(e instanceof jwt.JsonWebTokenError);
+    t.is(e.name, 'JsonWebTokenError');
+  }
+});
+
+test('expiration is set two 6 hours', t => {
+  const token = jwt.decode(jwt.create());
+  const SIX_HOURS = 60 * 60 * 6;
+
+  // division by 1000 to normalize to seconds
+  t.is(token.exp, Math.floor(new Date() / 1000) + SIX_HOURS);
+});
+
+test('works', t => {
+  const token = jwt.decode(jwt.create({
+    sub: 'override',
+    foo: 'blue'
+  }));
+
+  t.true(typeof token.iat === 'number');
+  t.true(typeof token.nbf === 'number');
+  t.true(token.nbf === token.iat);
+  t.is(token.sub, 'override');
+  t.is(token.foo, 'blue');
+});
+
+test('works', t => {
+  const body = {sub: 'test', pub: 'pizza'};
+  const decoded = jwt.verify(jwt.create(body));
+
+  t.is(decoded.pub, body.pub);
+  t.is(decoded.sub, body.sub);
+});
+
+test('allows for custom options', t => {
+  t.plan(1);
+
+  try {
+    jwt.verify(jwt.create(), {algorithms: ['garbage']});
+  } catch (e) {
+    t.true(e instanceof jwt.JsonWebTokenError);
+  }
 });
