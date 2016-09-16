@@ -9,7 +9,8 @@
     "pretest": "eslint .",
     "test": "NODE_CONFIG_DIR=\"$(pwd)/config\" nyc ava",
     "precover": "npm test",
-    "cover": "nyc report --reporter=html"
+    "cover": "nyc report --reporter=lcov",
+    "ci": "npm run cover -s && codecov"
   },
   "repository": {
     "type": "git",
