@@ -13,7 +13,7 @@ test('key length matches hash length of algorithm', t => {
 test('create works', t => {
   const token = jwt.decode(jwt.create({
     sub: 'override',
-    foo: 'blue'
+    foo: 'blue',
   }));
 
   t.true(typeof token.iat === 'number');

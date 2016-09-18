@@ -13,7 +13,7 @@ export default postgres.define('User', {
   },
   password: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
   },
   firstName: {
     type: Sequelize.STRING,
@@ -31,5 +31,5 @@ export default postgres.define('User', {
       return password.hash(user.password)
            .then(hash => (user.password = hash));
     },
-  }
+  },
 });

@@ -7,7 +7,7 @@ export default postgres.define('Gig', {
     type: Sequelize.DATE,
     validate: {
       isDate: true,
-    }
+    },
   },
   accepted: {
     type: Sequelize.BOOLEAN,
