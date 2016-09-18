@@ -1,9 +1,9 @@
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 
-import bcrypt from './bcrypt';
 import {User} from '../models';
-import {AuthError} from './errors';
+import bcrypt from '../lib//bcrypt';
+import {AuthError} from '../lib/errors';
 
 function passwordAuth(username, password, done) {
 
