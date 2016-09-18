@@ -16,8 +16,8 @@
     "type": "git",
     "url": "git+https://github.com/calbhangra/backend.git"
   },
-  "author": "Cal Bhangra",
-  "license": "GPL-3.0",
+  "author": "Gurpreet Atwal",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/calbhangra/backend/issues"
   },
