@@ -16,10 +16,9 @@ test('create works', t => {
     foo: 'blue',
   }));
 
-  t.true(typeof token.iat === 'number');
-  t.true(typeof token.nbf === 'number');
-  t.true(token.nbf === token.iat);
-  t.is(token.sub, 'override');
+  t.is(typeof token.iat, 'number');
+  t.is(typeof token.nbf, 'number');
+  t.is(token.iat, token.nbf);
   t.is(token.foo, 'blue');
 });
 
