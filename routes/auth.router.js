@@ -1,12 +1,10 @@
 import {Router} from 'express';
 
-import auth from '../lib/passport';
+import authenticate from '../middleware/authenticate';
 
 const router = new Router();
 
-router.post('/login', auth, (req, res) => {
-  res.send('authed!');
-});
+router.post('/login', authenticate.password);
 
 router.post('/signup', (req, res) => {
  // TODO create user
