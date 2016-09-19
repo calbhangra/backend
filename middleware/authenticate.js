@@ -3,6 +3,26 @@ import {User} from '../models';
 import bcrypt from '../lib/bcrypt';
 import {AuthError, InvalidRequestError} from '../lib/errors';
 
+export function jwtAuth(req, res, next) {
+  const token = req.get('authorization');
+
+  if (!token) {
+    const message = 'JWT must be provided in the Authorization header';
+    return next(new AuthError(message));
+  }
+
+  try {
+    var payload = jwt.verify(token);
+  } catch (e) {
+    return next(e);
+  }
+
+  req.userId = payload.sub;
+  req.roles = payload.roles;
+
+  return next();
+}
+
 export function passwordAuth(req, res, next) {
 
   if (!req.body.email || !req.body.password) {
@@ -29,5 +49,6 @@ export function passwordAuth(req, res, next) {
 }
 
 export default {
+  jwt: jwtAuth,
   password: passwordAuth,
 };
