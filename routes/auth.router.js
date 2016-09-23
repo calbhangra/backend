@@ -19,7 +19,10 @@ router.post('/signup', promisify(req => {
         roles: ['user'],
       };
 
-      return jwt.create(payload);
+      return {
+        token: jwt.create(payload),
+      };
+
     });
 }));
 
