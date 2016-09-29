@@ -1,34 +1,69 @@
 import test from 'ava';
+import sinon from 'sinon';
+
+import {User} from '../../models';
 import authenticate from '../../middleware/authenticate';
 import {AuthError, InvalidRequestError} from '../../lib/errors';
 
-// TODO install sinon and refactor these tests so they're cleaner
+const JWT_REGEX = /^[\w\-]+?\.[\w\-]+?\.[\w\-]+?$/;
+
+test.before(() => {
+  return User.create({
+    email: 'hello@pluto.com',
+    password: 'moon',
+  });
+});
 
 test('password fails when email or password is missing', t => {
 
-  authenticate.password({body: ''}, {}, function(error) {
-    t.true(error instanceof InvalidRequestError);
-  });
+  let stub = sinon.stub();
 
-  authenticate.password({body: {email: true}}, {}, function(error) {
-    t.true(error instanceof InvalidRequestError);
-  });
+  authenticate.password({body: ''}, {}, stub);
+  authenticate.password({body: {email: true}}, {}, stub);
+  authenticate.password({body: {password: true}}, {}, stub);
 
-  authenticate.password({body: {password: true}}, {}, function(error) {
-    t.true(error instanceof InvalidRequestError);
-  });
-
+  t.is(stub.callCount, 3);
+  stub.args.forEach(args => t.true(args[0] instanceof InvalidRequestError));
 });
 
-test('password throws AuthError if user is not found', t => {
+test.cb('password throws AuthError if user is not found', t => {
 
-  authenticate.password({
-    body: {
-      email: 'hello@mars.com',
-      password: 'moon',
-    },
-  }, {}, function(error) {
-    t.true(error instanceof AuthError);
+  let body = {
+    email: 'hello@mars.com',
+    password: 'moon',
+  };
+
+  authenticate.password({body}, {}, arg => {
+    t.true(arg instanceof AuthError);
+    t.end();
   });
+});
 
+test.cb("password throws AuthError if password's don't match", t => {
+
+  let body = {
+    email: 'hello@pluto.com',
+    password: 'planet',
+  };
+
+  authenticate.password({body}, {}, arg => {
+    t.true(arg instanceof AuthError);
+    t.end();
+  });
+});
+
+test.cb('password returns a JWT on success', t => {
+
+  let body = {
+    email: 'hello@pluto.com',
+    password: 'moon',
+  };
+
+  let json = function(data) {
+    t.truthy(data.token);
+    t.true(JWT_REGEX.test(data.token));
+    t.end();
+  };
+
+  authenticate.password({body}, {json});
 });

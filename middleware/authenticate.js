@@ -43,7 +43,10 @@ export function passwordAuth(req, res, next) {
         roles: ['user'],
       };
 
-      res.json(jwt.create(payload));
+      res.json({
+        token: jwt.create(payload),
+      });
+
     })
     .catch(next);
 }
