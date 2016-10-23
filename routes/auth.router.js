@@ -1,16 +1,18 @@
 import {Router} from 'express';
 
-import auth from '../lib/passport';
+import {User} from '../models';
+import promisify from './promisify';
+import authenticate from '../middleware/authenticate';
 
 const router = new Router();
 
-router.post('/login', auth, (req, res) => {
-  res.send('authed!');
-});
+router.post('/login', authenticate.password);
 
-router.post('/signup', (req, res) => {
- // TODO create user
-  res.sendStatus(501);
-});
+router.post('/signup', promisify(req => {
+  return User
+    .create(req.body)
+    .then(authenticate.createToken)
+    .then(token => ({token}));
+}));
 
 export default router;

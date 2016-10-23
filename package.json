@@ -1,6 +1,6 @@
 {
   "name": "cal-bhangra-app-backend",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Backend services for the Cal Bhangra web & (possible) mobile apps",
   "main": "lib/index.js",
   "scripts": {
@@ -30,8 +30,6 @@
     "express": "^4.13.4",
     "jsonwebtoken": "^7.1.9",
     "lodash": "^4.13.1",
-    "passport": "^0.3.2",
-    "passport-local": "^1.0.0",
     "pg": "^6.0.3",
     "pg-hstore": "^2.3.2",
     "sequelize": "^3.23.3"
@@ -44,7 +42,8 @@
     "eslint": "^3.6.1",
     "eslint-config-smartcar": "^1.0.0",
     "nodemon": "^1.9.2",
-    "nyc": "^8.3.0"
+    "nyc": "^8.3.0",
+    "sinon": "^1.17.6"
   },
   "eslintConfig": {
     "extends": "smartcar",

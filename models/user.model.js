@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 
+import bcrypt from '../lib/bcrypt';
 import {postgres} from '../lib/db';
-import password from '../lib/password';
 
 export default postgres.define('User', {
   email: {
@@ -28,8 +28,9 @@ export default postgres.define('User', {
         return;
       }
 
-      return password.hash(user.password)
-           .then(hash => (user.password = hash));
+      return bcrypt
+        .hash(user.password)
+        .then(hash => (user.password = hash));
     },
   },
 });
