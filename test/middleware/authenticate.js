@@ -60,11 +60,12 @@ test('password fails when email or password is missing', t => {
 
   let stub = sinon.stub();
 
+  authenticate.password({}, {}, stub);
   authenticate.password({body: ''}, {}, stub);
   authenticate.password({body: {email: true}}, {}, stub);
   authenticate.password({body: {password: true}}, {}, stub);
 
-  t.is(stub.callCount, 3);
+  t.is(stub.callCount, 4);
   stub.args.forEach(args => t.true(args[0] instanceof InvalidRequestError));
 
 });
