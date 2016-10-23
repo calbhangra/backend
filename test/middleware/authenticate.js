@@ -16,10 +16,10 @@ test.before(() => {
   });
 });
 
-test.cb('jwt throws AuthError if token is not provided in auth header', t => {
+test.cb('jwt - throws error if Authorization header is not set', t => {
 
   authenticate.jwt({get: _.noop}, {}, arg => {
-    t.true(arg instanceof AuthError);
+    t.true(arg instanceof InvalidRequestError);
     t.true(_.includes(arg.message, 'JWT'));
     t.true(_.includes(arg.message, 'Authorization'));
     t.end();
@@ -27,9 +27,9 @@ test.cb('jwt throws AuthError if token is not provided in auth header', t => {
 
 });
 
-test.cb('jwt throws JWTError if token is invalid', t => {
+test.cb('jwt - throws JWTError if token is invalid', t => {
 
-  let req = {
+  const req = {
     get: sinon.stub().withArgs('authorization').returns('venus'),
   };
 
@@ -40,13 +40,13 @@ test.cb('jwt throws JWTError if token is invalid', t => {
 
 });
 
-test.cb('jwt sets req.userId and req.roles', t => {
+test.cb('jwt - sets properties on req', t => {
 
   const token = jwt.create({sub: 'jupiter', roles: ['giant']});
-  let req = {
+
+  const req = {
     get: sinon.stub().withArgs('authorization').returns(token),
   };
-
 
   authenticate.jwt(req, {}, () => {
     t.is(req.userId, 'jupiter');
@@ -56,9 +56,9 @@ test.cb('jwt sets req.userId and req.roles', t => {
 
 });
 
-test('password fails when email or password is missing', t => {
+test('password - throws error if body/email/password are missing', t => {
 
-  let stub = sinon.stub();
+  const stub = sinon.stub();
 
   authenticate.password({}, {}, stub);
   authenticate.password({body: ''}, {}, stub);
@@ -70,9 +70,9 @@ test('password fails when email or password is missing', t => {
 
 });
 
-test.cb('password throws AuthError if user is not found', t => {
+test.cb('password - throws AuthError if user is not found', t => {
 
-  let body = {
+  const body = {
     email: 'hello@mars.com',
     password: 'moon',
   };
@@ -84,9 +84,9 @@ test.cb('password throws AuthError if user is not found', t => {
 
 });
 
-test.cb("password throws AuthError if password's don't match", t => {
+test.cb('password - throws AuthError if password is incorrect', t => {
 
-  let body = {
+  const body = {
     email: 'hello@pluto.com',
     password: 'planet',
   };
@@ -98,14 +98,14 @@ test.cb("password throws AuthError if password's don't match", t => {
 
 });
 
-test.cb('password returns a JWT on success', t => {
+test.cb('password - returns a json body with a JWT', t => {
 
-  let body = {
+  const body = {
     email: 'hello@pluto.com',
     password: 'moon',
   };
 
-  let json = function(data) {
+  const json = function(data) {
     t.truthy(data.token);
     t.true(JWT_REGEX.test(data.token));
     t.end();
@@ -114,3 +114,12 @@ test.cb('password returns a JWT on success', t => {
   authenticate.password({body}, {json});
 
 });
+
+test('createToken', t => {
+  const token = authenticate.createToken({id: 10});
+  t.true(JWT_REGEX.test(token));
+
+  const payload = jwt.decode(token);
+  t.is(payload.sub, 10);
+});
+

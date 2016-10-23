@@ -8,7 +8,7 @@ export function jwtAuth(req, res, next) {
 
   if (!token) {
     const message = 'JWT must be provided in the Authorization header';
-    return next(new AuthError(message));
+    return next(new InvalidRequestError(message));
   }
 
   try {
@@ -36,22 +36,20 @@ export function passwordAuth(req, res, next) {
     })
     .tap(user => { if (!user) throw new AuthError(); })
     .tap(user => bcrypt.verify(req.body.password, user.password))
-    .then(user => {
-
-      let payload = {
-        sub: user.id,
-        roles: ['user'],
-      };
-
-      res.json({
-        token: jwt.create(payload),
-      });
-
-    })
+    .then(createToken)
+    .then(token => res.json({token}))
     .catch(next);
+}
+
+export function createToken(user) {
+  return jwt.create({
+    sub: user.id,
+    roles: ['user'],
+  });
 }
 
 export default {
   jwt: jwtAuth,
   password: passwordAuth,
+  createToken,
 };
