@@ -2,15 +2,20 @@ language: node_js
 node_js:
   - '6'
 
+cache:
+  directories:
+    - $HOME/.npm
+    - node_modules
+
 services:
   - postgresql
 
 before_script:
   - psql -c 'create database calbhangra;' -U postgres
-  - npm i codecov
 
 script:
-  - npm run ci
+  - npm run cover
+  - bash <(curl -s https://codecov.io/bash)
 
 env: >
   - CXX=g++-4.8
