@@ -1,4 +1,10 @@
 {
-  "presets": ["es2015", "stage-2"],
-  "plugins": []
+  "presets": ["eslatest-node6"],
+  "plugins": [],
+  "ignore": [
+    "node_modules",
+    "coverage",
+    "test",
+    "/^out/",
+  ],
 }
