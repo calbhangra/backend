@@ -77,7 +77,12 @@ test.cb('password - throws AuthError if user is not found', t => {
     password: 'moon',
   };
 
-  authenticate.password({body}, {}, arg => {
+  const json = function() {
+    t.fail('res.json should not have been called');
+    t.end();
+  };
+
+  authenticate.password({body}, {json}, arg => {
     t.true(arg instanceof AuthError);
     t.end();
   });
@@ -91,7 +96,12 @@ test.cb('password - throws AuthError if password is incorrect', t => {
     password: 'planet',
   };
 
-  authenticate.password({body}, {}, arg => {
+  const json = function() {
+    t.fail('res.json should not have been called');
+    t.end();
+  };
+
+  authenticate.password({body}, {json}, arg => {
     t.true(arg instanceof AuthError);
     t.end();
   });

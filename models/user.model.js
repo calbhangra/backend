@@ -1,6 +1,6 @@
+import bcrypt from 'bcrypt';
 import Sequelize from 'sequelize';
 
-import bcrypt from '../lib/bcrypt';
 import {postgres} from '../lib/db';
 
 export default postgres.define('User', {
@@ -29,7 +29,7 @@ export default postgres.define('User', {
       }
 
       return bcrypt
-        .hash(user.password)
+        .hash(user.password, 10)
         .then(hash => (user.password = hash));
     },
   },

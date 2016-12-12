@@ -1,6 +1,7 @@
+import bcrypt from 'bcrypt';
+
 import jwt from '../lib/jwt';
 import {User} from '../models';
-import bcrypt from '../lib/bcrypt';
 import {AuthError, InvalidRequestError} from '../lib/errors';
 
 export function jwtAuth(req, res, next) {
@@ -34,8 +35,19 @@ export function passwordAuth(req, res, next) {
       where: {email: req.body.email},
       attributes: {exclude: []},
     })
-    .tap(user => { if (!user) throw new AuthError(); })
-    .tap(user => bcrypt.verify(req.body.password, user.password))
+    .tap(async user => {
+
+      if (!user) {
+        throw new AuthError();
+      }
+
+      const valid = await bcrypt.compare(req.body.password, user.password);
+
+      if (!valid) {
+        throw new AuthError();
+      }
+
+    })
     .then(createToken)
     .then(token => res.json({token}))
     .catch(next);

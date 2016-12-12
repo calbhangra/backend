@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/calbhangra/backend#readme",
   "dependencies": {
-    "bcrypt": "^0.8.7",
+    "bcrypt": "^1.0.1",
     "bluebird": "^3.4.1",
     "body-parser": "^1.15.1",
     "config": "^1.21.0",
