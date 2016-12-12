@@ -7,7 +7,7 @@ import {User} from '../../models';
 import authenticate from '../../middleware/authenticate';
 import {AuthError, InvalidRequestError} from '../../lib/errors';
 
-const JWT_REGEX = /^[\w\-]+?\.[\w\-]+?\.[\w\-]+?$/;
+const JWT_REGEX = /^[\w-]+?\.[\w-]+?\.[\w-]+?$/;
 
 test.before(() => {
   return User.create({

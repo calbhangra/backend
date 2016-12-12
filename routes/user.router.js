@@ -29,7 +29,7 @@ router.put('/:id', promisify(req => {
     .update(req.body, {
       where: {id: req.params.id},
       returning: true,
-      fields: fields,
+      fields,
     })
     .spread((count, records) => {
       if (count !== 1) throw new ServerError();

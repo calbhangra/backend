@@ -36,13 +36,13 @@
     "sequelize": "^3.23.3"
   },
   "devDependencies": {
-    "ava": "^0.16.0",
+    "ava": "^0.17.0",
     "babel-cli": "^6.10.1",
     "babel-preset-eslatest-node6": "^1.0.1",
     "eslint": "^3.6.1",
-    "eslint-config-smartcar": "^1.0.0",
+    "eslint-config-smartcar": "^2.0.0",
     "nodemon": "^1.9.2",
-    "nyc": "^8.3.0",
+    "nyc": "^10.0.0",
     "sinon": "^1.17.6"
   },
   "eslintConfig": {
@@ -51,11 +51,9 @@
       "ecmaVersion": 2017,
       "sourceType": "module"
     },
-    "env": {
-      "es6": true
-    },
     "rules": {
-      "curly": "off"
+      "curly": "off",
+      "arrow-body-style": "off"
     }
   },
   "ava": {

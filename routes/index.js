@@ -9,7 +9,7 @@ baseRouter.get('/', (req, res) => {
 
 routes.forEach(route => {
   // eslint-disable-next-line global-require
-  let router = require(`./${route}.router`);
+  const router = require(`./${route}.router`);
   baseRouter.use(`/${route}`, router.default);
 });
 
