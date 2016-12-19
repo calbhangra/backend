@@ -3,10 +3,12 @@ import {Router} from 'express';
 import {Gig} from '../models';
 import promisify from '../lib/promisify';
 import {ServerError} from '../lib/errors';
+import authenticate from '../middleware/authenticate';
 
 const router = new Router();
 
 // TODO add permission checks to all routes except create
+router.use(authenticate.jwt);
 
 router.get('/', promisify(() => {
   return Gig.findAll();
