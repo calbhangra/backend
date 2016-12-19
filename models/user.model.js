@@ -21,6 +21,10 @@ export default database.define('User', {
   lastName: {
     type: Sequelize.STRING,
   },
+  role: {
+    type: Sequelize.STRING,
+    defaultValue: 'user',
+  },
 }, {
   hooks: {
     afterValidate: function(user) {
