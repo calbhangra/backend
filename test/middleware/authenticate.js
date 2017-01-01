@@ -9,9 +9,8 @@ import {AuthError, InvalidRequestError} from '../../lib/errors';
 
 const JWT_REGEX = /^[\w-]+?\.[\w-]+?\.[\w-]+?$/;
 
-test.before(async() => {
-  await User.sync();
-  await User.create({
+test.before(() => {
+  return User.create({
     email: 'hello@pluto.com',
     password: 'moon',
   });

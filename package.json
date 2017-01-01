@@ -6,11 +6,11 @@
   "scripts": {
     "start": "nodemon lib/app.js --exec babel-node",
     "build": "babel . -d out --ignore node_modules",
-    "lint": "eslint . --fix",
-    "pretest": "eslint .",
-    "test": "NODE_CONFIG_DIR=\"$(pwd)/config\" nyc ava",
-    "precover": "npm test",
-    "cover": "nyc report --reporter=lcov"
+    "lint": "eslint .",
+    "pretest": "babel-node test/helpers/sync_db.js",
+    "test": "NODE_CONFIG_DIR=\"$(pwd)/config\" ava",
+    "posttest": "npm run lint -s",
+    "cover": "nyc npm test -s"
   },
   "repository": {
     "type": "git",
