@@ -53,7 +53,7 @@
     },
     "rules": {
       "curly": "off",
-      "arrow-body-style": "off"
+      "arrow-parens": ["error", "as-needed", {"requireForBlockBody": false}]
     }
   },
   "ava": {
