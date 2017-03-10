@@ -1,4 +1,4 @@
 'use strict'; // eslint-disable-line strict
 
 require('../../models');
-require('../../lib/db').postgres.sync();
+require('../../lib/db').default.sync({force: true});

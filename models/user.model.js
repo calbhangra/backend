@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
 import Sequelize from 'sequelize';
 
-import {postgres} from '../lib/db';
+import database from '../lib/db';
 
-export default postgres.define('User', {
+export default database.define('User', {
   email: {
     type: Sequelize.STRING,
     allowNull: false,

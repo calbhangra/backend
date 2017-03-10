@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon lib/app.js --exec babel-node",
     "build": "babel . -d out --ignore node_modules",
-    "lint": "eslint .",
+    "lint": "eslint . --cache",
     "pretest": "babel-node test/helpers/sync_db.js",
     "test": "ava",
     "posttest": "npm run lint -s",
@@ -44,17 +44,6 @@
     "nodemon": "^1.9.2",
     "nyc": "^10.0.0",
     "sinon": "^1.17.6"
-  },
-  "eslintConfig": {
-    "extends": "smartcar",
-    "parserOptions": {
-      "ecmaVersion": 2017,
-      "sourceType": "module"
-    },
-    "rules": {
-      "curly": "off",
-      "arrow-parens": ["error", "as-needed", {"requireForBlockBody": false}]
-    }
   },
   "ava": {
     "require": "babel-register"

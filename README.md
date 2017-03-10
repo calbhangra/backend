@@ -7,7 +7,7 @@
   <a href="https://travis-ci.org/calbhangra/backend">
     <img src="https://img.shields.io/travis/calbhangra/backend/master.svg?style=flat-square" alt="Build Status">
   </a>
-  <a href="https://codecov.io/gh/gurpreetatwal/incito">
+  <a href="https://codecov.io/gh/calbhangra/backend">
     <img src="https://img.shields.io/codecov/c/github/calbhangra/backend/master.svg?style=flat-square" alt="Coverage">
     </a>
   <a href="https://www.bithound.io/github/calbhangra/backend">
