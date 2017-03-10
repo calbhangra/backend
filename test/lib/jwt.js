@@ -1,6 +1,6 @@
 import test from 'ava';
-import config from 'config';
 import jwt from '../../lib/jwt';
+import config from '../../config';
 
 const algo = config.get('jwt.algorithm');
 const secret = Buffer.from(config.get('jwt.secret'), 'base64');

@@ -1,1 +1,9 @@
-{}
+{
+  "database": {
+    "port": 5432,
+    "dialect": "postgres"
+  },
+  "jwt": {
+    "algorithm": "HS512"
+  }
+}

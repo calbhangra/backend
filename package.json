@@ -8,7 +8,7 @@
     "build": "babel . -d out --ignore node_modules",
     "lint": "eslint .",
     "pretest": "babel-node test/helpers/sync_db.js",
-    "test": "NODE_CONFIG_DIR=\"$(pwd)/config\" ava",
+    "test": "ava",
     "posttest": "npm run lint -s",
     "cover": "nyc npm test -s"
   },
@@ -26,7 +26,7 @@
     "bcrypt": "^1.0.1",
     "bluebird": "^3.4.1",
     "body-parser": "^1.15.1",
-    "config": "^1.21.0",
+    "convict": "^2.0.0",
     "cors": "^2.7.1",
     "express": "^4.13.4",
     "jsonwebtoken": "^7.1.9",
