@@ -9,22 +9,28 @@ import authenticate from '../middleware/authenticate';
 
 const router = new Router();
 
+const overrides = {
+  'user.self': function(req) {
+    return req.params.id === String(req.userId);
+  },
+};
+
 router.use(authenticate.jwt);
 
 router.get('/',
-  permission.check('user.list'),
+  permission.middleware('user.list', overrides),
   promisify(() => {
     return User.findAll();
   }));
 
 router.get('/:id',
-  permission.check(['user.self', 'user.get']),
+  permission.middleware(['user.self', 'user.get'], overrides),
   promisify(req => {
     return User.findById(req.params.id);
   }));
 
 router.put('/:id',
-  permission.check(['user.self', 'user.modify']),
+  permission.middleware(['user.self', 'user.modify'], overrides),
   promisify(req => {
     var fields = Object.keys(req.body);
     fields = _.without(fields, 'password');
@@ -43,7 +49,7 @@ router.put('/:id',
   }));
 
 router.delete('/:id',
-  permission.check(['user.self', 'user.delete']),
+  permission.middleware(['user.self', 'user.delete'], overrides),
   async (req, res, next) => {
     // TODO log username and metadata into seperate log file
 

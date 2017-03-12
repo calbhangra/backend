@@ -1,40 +1,61 @@
-import _ from 'lodash';
-
 import {PermissionError} from '../lib/errors';
 
+const validators = {};
+
 const roles = {
-  user: [],
+  user: [
+    'user.self',
+  ],
   admin: [
-    'user.*',
+    'user.list',
+    'user.get',
+    'user.modify',
+    'user.delete',
   ],
 };
 
-function checker(whitelist, req) {
+/**
+ *
+ * @param {external:Express~Request} req - express request object
+ * @param {String[]} requiredPermissions -
+ * @param {Object}  overrides -
+ * @return {Boolean}
+ */
+function checker(req, requiredPermissions, overrides) {
 
-  const role = req.role;
+  const role = req.roles;
   const permissions = roles[role];
 
-  if (_.intersection(permissions, whitelist)) {
-    return Promise.resolve();
-  }
+  return requiredPermissions.some(function(permission) {
 
-  // there needs to be a better way to allow this functionality
-  if (req.params.id && whitelist.includes('user.self')
-  && req.userId === req.params.id) {
-    return Promise.resolve();
-  }
+    if (permission in overrides) {
+      return overrides[permission](req);
+    } else if (permission in validators) {
+      return validators[permission](req);
+    } else {
+      return permissions.includes(permission);
+    }
 
-  return Promise.reject(new PermissionError());
+  });
 
 }
 
-function middleware(whitelist) {
+/**
+ *
+ * @param {String[]} requiredPermissions -
+ * @param {Object} overrides -
+ */
+function middleware(requiredPermissions, overrides = {}) {
 
   return function(req, res, next) {
-    return checker(whitelist, req)
-      .then(() => next())
-      .catch(err => next(err));
+    const matched = checker(req, requiredPermissions, overrides);
+
+    if (matched) {
+      return next();
+    } else {
+      return next(new PermissionError());
+    }
   };
 }
 
-export {checker, middleware};
+export default {checker, middleware};
