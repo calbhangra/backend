@@ -19,7 +19,7 @@ export function jwtAuth(req, res, next) {
   }
 
   req.userId = payload.sub;
-  req.roles = payload.roles;
+  req.role = payload.role;
 
   return next();
 }
@@ -56,7 +56,7 @@ export function passwordAuth(req, res, next) {
 export function createToken(user) {
   return jwt.create({
     sub: user.id,
-    roles: ['user'],
+    role: ['user'],
   });
 }
 

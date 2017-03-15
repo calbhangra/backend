@@ -41,7 +41,7 @@ test.cb('jwt - throws JWTError if token is invalid', t => {
 
 test.cb('jwt - sets properties on req', t => {
 
-  const token = jwt.create({sub: 'jupiter', roles: ['giant']});
+  const token = jwt.create({sub: 'jupiter', role: 'giant'});
 
   const req = {
     get: sinon.stub().withArgs('authorization').returns(token),
@@ -49,7 +49,7 @@ test.cb('jwt - sets properties on req', t => {
 
   authenticate.jwt(req, {}, () => {
     t.is(req.userId, 'jupiter');
-    t.is(req.roles[0], 'giant');
+    t.is(req.role, 'giant');
     t.end();
   });
 

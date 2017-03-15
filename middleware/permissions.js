@@ -1,6 +1,11 @@
 import {PermissionError} from '../lib/errors';
 
-const validators = {};
+const validators = {
+  'user.self': function() {
+    // user.self must "enabled" by overriding this validator
+    return false;
+  },
+};
 
 const roles = {
   user: [
@@ -21,9 +26,9 @@ const roles = {
  * @param {Object}  overrides -
  * @return {Boolean}
  */
-function checker(req, requiredPermissions, overrides) {
+export function checker(req, requiredPermissions, overrides = {}) {
 
-  const role = req.roles;
+  const role = req.role;
   const permissions = roles[role];
 
   return requiredPermissions.some(function(permission) {
@@ -45,7 +50,7 @@ function checker(req, requiredPermissions, overrides) {
  * @param {String[]} requiredPermissions -
  * @param {Object} overrides -
  */
-function middleware(requiredPermissions, overrides = {}) {
+export function middleware(requiredPermissions, overrides = {}) {
 
   return function(req, res, next) {
     const matched = checker(req, requiredPermissions, overrides);
