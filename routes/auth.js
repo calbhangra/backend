@@ -1,7 +1,7 @@
 import {Router} from 'express';
 
 import {User} from '../models';
-import promisify from './promisify';
+import promisify from '../lib/promisify';
 import authenticate from '../middleware/authenticate';
 
 const router = new Router();

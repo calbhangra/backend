@@ -4,10 +4,9 @@ import sinon from 'sinon';
 
 import jwt from '../../lib/jwt';
 import {User} from '../../models';
+import {JWT_REGEX} from '../helpers/utils';
 import authenticate from '../../middleware/authenticate';
 import {AuthError, InvalidRequestError} from '../../lib/errors';
-
-const JWT_REGEX = /^[\w-]+?\.[\w-]+?\.[\w-]+?$/;
 
 test.before(() => {
   return User.create({
@@ -117,7 +116,7 @@ test.cb('password - returns a json body with a JWT', t => {
 
   const json = function(data) {
     t.truthy(data.token);
-    t.true(JWT_REGEX.test(data.token));
+    t.regex(data.token, JWT_REGEX);
     t.end();
   };
 
@@ -127,7 +126,7 @@ test.cb('password - returns a json body with a JWT', t => {
 
 test('createToken', t => {
   const token = authenticate.createToken({id: 10});
-  t.true(JWT_REGEX.test(token));
+  t.regex(token, JWT_REGEX);
 
   const payload = jwt.decode(token);
   t.is(payload.sub, 10);
