@@ -22,88 +22,104 @@ import Sequelize from 'sequelize';
  * }
  */
 
+/**
+ * @param {Error} err
+ * @return {TransformedError}
+ */
 export const transformers = {};
 
-/**
- * Handles Sequelize's ValidationErrors
- *
- * @param {external:sequelize.ValidationError} err
- * @return {Object} {message, errors}
- */
 transformers.validation = function(err) {
-
   return {
     code: 400,
     message: 'Invalid Values',
     errors: err.errors.map(function(e) {
-      // TODO e.message should be cleaned up before being sent to client
-      // e.type should be helpful for this
+      if (e.type === 'notNull Violation') e.message = 'must not be null';
       return {field: e.path, reason: e.message};
     }),
   };
-
 };
 
-/**
- * Handles subclasses of Sequelize's DatabaseError which include
- *   - UniqueConstraintError
- *   - ExclusionConstraintError
- *   - ForeignKeyConstraintError
- *   - TimeoutError: query timeouts caused by deadlocks
- *
- * @param {external:sequelize.DatabaseError} err
- * @return {TransformedError}
- */
-transformers.database = function(err) {
-
-  // TODO these probably don't need their own transformer
-
-  // TODO DatabaseError does not have errors, its stored in string
-  // can be trigged by invalid uuid
-  err.errors = err.errors || [];
-
+transformers.unique = function(err) {
   return {
     code: 409,
-    message: 'Conflict',
+    message: 'Uniqueness Failure',
     errors: err.errors.map(function(e) {
-      // TODO e.message should be cleaned up before being sent to client
-      // e.type should be helpful for this
-      return {field: e.path, reason: e.message};
+      return {field: e.path, reason: 'must be unique'};
     }),
   };
-
 };
 
-/**
- * Handles errors that were not caught by any other transformer
- *
- * @param {Error} err
- * @return {TransformedError}
- */
+
+transformers.contraint = function() {
+  // TODO
+};
+
+transformers.database = function() {
+  return {
+    code: 400,
+    message: 'Invalid values, verify if all data sent is of correct format',
+  };
+};
+
+transformers.timeout = function() {
+  return {
+    code: 503,
+    message: 'Server timeout, please try again in a few moments',
+  };
+};
+
 transformers.generic = function(err) {
 
   const code = Number.isFinite(err.statusCode) ? err.statusCode : 500;
-  const message = code === 500 ? 'Unexpected error, please try again later' : err.message;
+
+  let message = 'Unexpected error, please try again later';
+
+  if (code !== 500) {
+    message = err.message;
+  }
 
   return {code, message};
 
 };
 
 /**
- * Transforms an error into an object containing a status code and a reponse
- * body
+ * Transforms an error into a response body that can be sent to the client
  *
- * @param {Error} err
- * @return {Object} {code: Number, body: TransformedError}
+ * @param {Error} err - the caught error
+ * @return {TransformedError} - the cleaned up error
  */
 export function handler(err) {
 
   let transformer = transformers.generic;
 
-  if (err instanceof Sequelize.ValidationError) {
-    transformer = transformers.validation;
-  } else if (err instanceof Sequelize.DatabaseError) {
-    transformer = transformers.database;
+  const name = err.name.replace(/(Sequelize|Error)/g, '');
+  switch (name) {
+    case 'Validation':
+      transformer = transformers.validation;
+      break;
+    case 'UniqueConstraint':
+      transformer = transformers.unique;
+      break;
+    case 'ForeignKeyConstraint':
+    case 'ExclusionConstraint':
+      transformer = transformers.constraint;
+      break;
+    case 'Timeout':
+      transformer = transformers.timeout;
+      break;
+    case 'Database':
+      transformer = transformers.database;
+      break;
+    default:
+      // no-default
+  }
+
+  if (err instanceof Sequelize.ConnectionError) {
+    // TODO replace this with an acutal logger
+    /* eslint-disable no-console */
+    console.error('ERROR: CANNOT CONNECT TO DATABAESE');
+    console.error(err);
+    /* eslint-enable no-console */
   }
 
   return transformer(err);
@@ -119,11 +135,8 @@ export function middleware(err, req, res, next) {
 
   const body = handler(err);
 
-  if (req.log) {
-    req.log.error(err);
-  } else {
-    console.error(err);
-  }
+  // TODO replace this with an acutal logger
+  console.error(err); // eslint-disable-line no-console
 
   res.status(body.code).json(body);
 
