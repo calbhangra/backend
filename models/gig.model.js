@@ -1,37 +1,39 @@
 import Sequelize from 'sequelize';
+
 import database from '../lib/db';
+import validations from './validations';
 
 // TODO vardi, paagan, m/f, location, type, details
 export default database.define('Gig', {
   date: {
     type: Sequelize.DATE,
     validate: {
-      isDate: true,
+      isDate: validations.isDate(),
     },
   },
   accepted: {
     type: Sequelize.BOOLEAN,
     validate: {
-      isBoolean: true,
+      isBoolean: validations.isBoolean(),
     },
   },
   compensation: {
-    type: Sequelize.DOUBLE,
+    type: Sequelize.DECIMAL,
     validate: {
-      isNumeric: true,
+      isFloat: validations.isFloat({min: 0}),
     },
   },
   contactEmail: {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      isEmail: true,
+      isEmail: validations.isEmail(),
     },
   },
   dancersRequested: {
     type: Sequelize.INTEGER,
     validate: {
-      isInt: true,
+      isInt: validations.isInt({min: 1}),
     },
   },
 });

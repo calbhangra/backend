@@ -16,7 +16,7 @@ test('validates email', async t => {
   const error = await User.build(user).validate();
 
   t.true(error instanceof ValidationError);
-  t.true(_.includes(error.message, 'isEmail failed'));
+  t.true(_.includes(error.message, 'must be a valid email'));
 });
 
 test('requires password', async t => {

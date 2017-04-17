@@ -2,13 +2,14 @@ import bcrypt from 'bcrypt';
 import Sequelize from 'sequelize';
 
 import database from '../lib/db';
+import validations from './validations';
 
 export default database.define('User', {
   email: {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      isEmail: true,
+      isEmail: validations.isEmail(),
     },
   },
   password: {
