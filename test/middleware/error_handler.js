@@ -6,8 +6,8 @@ import db from '../../lib/db';
 import * as errors from '../../lib/errors';
 import {handler, middleware} from '../../middleware/error_handler';
 
-let MockModel;
-test.before(() => {
+let MockModel, ForeignKeyModel;
+test.before(async () => {
 
   MockModel = db.define('MockModel', {
     email: {
@@ -35,12 +35,26 @@ test.before(() => {
     },
   });
 
-  return MockModel.sync({force: true});
+  ForeignKeyModel = db.define('ForeignKeyModel', {
+    name: Sequelize.STRING,
+    ref: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      references: {
+        model: MockModel,
+        key: 'unique',
+      },
+    },
+  });
+
+  await MockModel.sync({force: true});
+  await ForeignKeyModel.sync({force: true});
 
 });
 
 test.after.always(() => {
   db.modelManager.removeModel(MockModel);
+  db.modelManager.removeModel(ForeignKeyModel);
 });
 
 test('Sequelize.ValidationError', async t => {
@@ -86,7 +100,18 @@ test('Sequelize.UniqueConstraintError', async t => {
 
 });
 
-test.todo('Sequelize.ForeignKeyConstraintError');
+test('Sequelize.ForeignKeyConstraintError', async t => {
+
+  const data = {ref: 'edasfdsf'};
+  const err = await t.throws(ForeignKeyModel.create(data));
+  const transformed = handler(err);
+
+  t.is(transformed.code, 409);
+  t.is(transformed.message, 'Database Constraint Failure');
+  t.is(transformed.errors[0].field, 'ref');
+  t.is(transformed.errors[0].reason, 'must have a matching MockModel');
+
+});
 
 test('Sequelize.DatabaseError', async t => {
 

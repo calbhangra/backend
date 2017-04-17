@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import Sequelize from 'sequelize';
 
 /**
@@ -50,8 +51,26 @@ transformers.unique = function(err) {
 };
 
 
-transformers.contraint = function() {
-  // TODO
+transformers.constraint = function(err) {
+
+  const detail = _.get(err, 'parent.detail', '');
+
+  const field = detail.match(/Key \((.*?)\)/);
+  const reason = detail.match(/in table "(.*?)"/);
+
+  let errors;
+  if (field && reason) {
+    errors = [{
+      field: field[1],
+      reason: `must have a matching ${reason[1].replace(/s$/, '')}`,
+    }];
+  }
+
+  return {
+    errors,
+    code: 409,
+    message: 'Database Constraint Failure',
+  };
 };
 
 transformers.database = function() {
