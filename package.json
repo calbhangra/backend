@@ -36,7 +36,7 @@
     "sequelize": "^3.23.3"
   },
   "devDependencies": {
-    "ava": "^0.19.0",
+    "ava": "^0.20.0",
     "axios": "^0.16.1",
     "babel-cli": "^6.10.1",
     "babel-preset-eslatest-node6": "^1.0.1",
